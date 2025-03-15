@@ -22,8 +22,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun teste(){
-
-}
