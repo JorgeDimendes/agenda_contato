@@ -59,12 +59,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    val nav_version = "2.8.9"
     val room_version = "2.6.1"
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //Room
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-
     ksp("androidx.room:room-compiler:$room_version")
 
+    //constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-beta01")
 }
