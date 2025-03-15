@@ -3,6 +3,7 @@ package com.jordev.agendadecontatos.views
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -40,7 +41,7 @@ fun ListaContatos(navController: NavController) {
             FloatingActionButton(
                 onClick = {}
             ) {
-                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         }
 
