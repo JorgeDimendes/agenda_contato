@@ -1,15 +1,19 @@
 package com.jordev.agendadecontatos.views
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -21,11 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.content.contentValuesOf
 import androidx.navigation.NavController
+import com.jordev.agendadecontatos.ChangeStatusBarTextColor
+import com.jordev.agendadecontatos.componentes.CustomButton
 import com.jordev.agendadecontatos.componentes.CustomTextField
 import com.jordev.agendadecontatos.ui.theme.PURPLE500
 import com.jordev.agendadecontatos.ui.theme.WHITE
@@ -38,8 +45,8 @@ fun SalvarContato(navController: NavController) {
     var sobrenome by remember { mutableStateOf("") }
     var idade by remember { mutableStateOf("") }
     var celular by remember { mutableStateOf("") }
-
-
+    val context: Context = LocalContext.current
+    ChangeStatusBarTextColor(false)
 
     Scaffold (
         topBar = {
@@ -52,13 +59,15 @@ fun SalvarContato(navController: NavController) {
                 title = {Text(text = "Salvar Novo Contato")}
             )
         }
-
     ){paddingValues ->
 
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
             CustomTextField(
                 valueId = nome,
@@ -66,9 +75,7 @@ fun SalvarContato(navController: NavController) {
                     nome = it
                 },
                 labelId = "Nome",
-                modifierId = Modifier,
                 leadingIcon = Icons.Default.Person,
-                //            keyboardOptionsId = KeyboardOptions(keyboardType = KeyboardType.Text)
                 keyboardOptionsId = KeyboardOptions.Default.copy(
                     capitalization = KeyboardCapitalization.Sentences //Primeira letra maiúscula
                 )
@@ -79,9 +86,7 @@ fun SalvarContato(navController: NavController) {
                     sobrenome = it
                 },
                 labelId = "Sobrenome",
-                modifierId = Modifier,
                 leadingIcon = Icons.Default.Person,
-                //            keyboardOptionsId = KeyboardOptions(keyboardType = KeyboardType.Text)
                 keyboardOptionsId = KeyboardOptions.Default.copy(
                     capitalization = KeyboardCapitalization.Sentences //Primeira letra maiúscula
                 )
@@ -92,10 +97,8 @@ fun SalvarContato(navController: NavController) {
                     idade = it
                 },
                 labelId = "Idade",
-                modifierId = Modifier,
                 leadingIcon = Icons.Default.Person,
                 keyboardOptionsId = KeyboardOptions(keyboardType = KeyboardType.Number)
-
             )
             CustomTextField(
                 valueId = celular,
@@ -106,10 +109,20 @@ fun SalvarContato(navController: NavController) {
                 modifierId = Modifier,
                 leadingIcon = Icons.Default.Phone,
                 keyboardOptionsId = KeyboardOptions(keyboardType = KeyboardType.Phone)
-
             )
+            CustomButton(
+                onClickId = {
+                    if (nome.isEmpty() || sobrenome.isEmpty() || idade.isEmpty() || celular.isEmpty()){
+                        Toast.makeText(context, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(context, "Contato salvo com sucesso", Toast.LENGTH_SHORT).show()
+                        navController.navigate("listaContatos")
 
+                    }
+                },
+                modifierId = Modifier,
+                txt = "Salvar"
+            )
         }
     }
-
 }

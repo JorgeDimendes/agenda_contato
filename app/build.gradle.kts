@@ -73,4 +73,7 @@ dependencies {
 
     //constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-beta01")
+
+    implementation(platform("androidx.compose:compose-bom:2025.01.01"))
+    implementation("androidx.compose.material3:material3")
 }

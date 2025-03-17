@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -22,7 +21,8 @@ fun CustomTextField(
     labelId: String,
     modifierId: Modifier = Modifier,
     leadingIcon: ImageVector? = null,
-    keyboardOptionsId: KeyboardOptions = KeyboardOptions.Default
+    keyboardOptionsId: KeyboardOptions = KeyboardOptions.Default,
+    isError: Boolean = false
 ) {
     OutlinedTextField(
         value = valueId,
@@ -30,9 +30,10 @@ fun CustomTextField(
         label = { Text(text = labelId) },
         modifier = modifierId
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(20.dp, 5.dp),
         singleLine = true,
         keyboardOptions = keyboardOptionsId,
+        isError = isError,
         maxLines = 1,
         leadingIcon = leadingIcon?.let { { Icon(it, contentDescription = null) } },
         trailingIcon = {
