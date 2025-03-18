@@ -131,10 +131,7 @@ fun SalvarContato(navController: NavController) {
                     scope.launch(Dispatchers.IO){
                         if (nome.isEmpty() || sobrenome.isEmpty() || idade.isEmpty() || celular.isEmpty()){
                             mensagem = false
-                            //Toast.makeText(context, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                         }else{
-//                        Toast.makeText(context, "Contato salvo com sucesso", Toast.LENGTH_SHORT).show()
-//                        navController.navigate("listaContatos")
                             mensagem = true
                             val contato = Contato(nome, sobrenome, idade, celular)
                             listaContatos.add(contato)
@@ -145,7 +142,6 @@ fun SalvarContato(navController: NavController) {
                     scope.launch(Dispatchers.Main){
                         if (mensagem){
                             Toast.makeText(context, "Contato salvo com sucesso!", Toast.LENGTH_SHORT).show()
-//                            navController.navigate("listaContatos")
                             navController.popBackStack()
                         }else{
                             Toast.makeText(context, "Preencha todos os campos", Toast.LENGTH_SHORT).show()

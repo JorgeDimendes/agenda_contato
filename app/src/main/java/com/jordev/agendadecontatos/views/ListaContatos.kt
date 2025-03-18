@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jordev.agendadecontatos.ChangeStatusBarTextColor
+import com.jordev.agendadecontatos.itemlista.ContatoItem
 import com.jordev.agendadecontatos.ui.theme.PURPLE500
 import com.jordev.agendadecontatos.ui.theme.WHITE
 
@@ -54,7 +55,7 @@ fun ListaContatos(navController: NavController) {
         Column(
             modifier = Modifier.padding(paddingvalue)
         ) {
-
+            ContatoItem(navController)
         }
     }
 }
