@@ -1,5 +1,6 @@
 package com.jordev.agendadecontatos.itemlista
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,14 +19,24 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.jordev.agendadecontatos.dao.ContatoDao
+import com.jordev.agendadecontatos.model.Contato
 import com.jordev.agendadecontatos.ui.theme.BLACK
 import com.jordev.agendadecontatos.ui.theme.RED
 import com.jordev.agendadecontatos.ui.theme.WHITE
 
 //@Preview(showBackground = true)
 @Composable
-fun ContatoItem(navController: NavController) {
-    val contato: MutableList<ContatoDao> = mutableListOf()
+fun ContatoItem(
+    navController: NavController,
+    position: Int,
+    listaContatos: MutableList<Contato>,
+    context: Context
+){
+//    val contato: MutableList<ContatoDao> = mutableListOf()
+    val nome = listaContatos[position].nome
+    val sobrenome = listaContatos[position].sobrenome
+    val idade = listaContatos[position].idade
+    val celular = listaContatos[position].celular
 
     Card(
         modifier = Modifier
@@ -45,7 +56,7 @@ fun ContatoItem(navController: NavController) {
         ) {
             val (txtNome, txtIdade, txtCelular, btAtualizar, btDeletar) = createRefs()
             Text(
-                text = "Contato: nome sobrenome",
+                text = "Contato: $nome $sobrenome",
                 fontSize = 18.sp,
                 modifier = Modifier.constrainAs(txtNome) {
                     top.linkTo(parent.top, margin = 10.dp)
@@ -53,7 +64,7 @@ fun ContatoItem(navController: NavController) {
                 }
             )
             Text(
-                text = "Idade: Idade",
+                text = "Idade: $idade",
                 fontSize = 18.sp,
                 modifier = Modifier.constrainAs(txtIdade) {
                     top.linkTo(txtNome.bottom, margin = 5.dp)
@@ -61,7 +72,7 @@ fun ContatoItem(navController: NavController) {
                 }
             )
             Text(
-                text = "Numero: txtCelular",
+                text = "Numero: $celular",
                 fontSize = 18.sp,
                 modifier = Modifier.constrainAs(txtCelular) {
                     top.linkTo(txtIdade.bottom, margin = 5.dp)
@@ -93,7 +104,6 @@ fun ContatoItem(navController: NavController) {
                     },
                 tint = RED
             )
-
         }
     }
 }
