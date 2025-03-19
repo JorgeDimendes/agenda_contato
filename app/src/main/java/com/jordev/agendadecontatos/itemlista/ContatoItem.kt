@@ -1,5 +1,6 @@
 package com.jordev.agendadecontatos.itemlista
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,21 +17,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.jordev.agendadecontatos.dao.ContatoDao
+import com.jordev.agendadecontatos.model.Contato
 import com.jordev.agendadecontatos.ui.theme.BLACK
 import com.jordev.agendadecontatos.ui.theme.RED
 import com.jordev.agendadecontatos.ui.theme.WHITE
+import com.jordev.agendadecontatos.viewmodel.ContatoViewModel
 
 //@Preview(showBackground = true)
 @Composable
-fun ContatoItem(navController: NavController) {
-    val contato: MutableList<ContatoDao> = mutableListOf()
+fun ContatoItem(
+    navController: NavController,
+    position: Int,
+    listaContatos: MutableList<Contato>,
+    context: Context,
+    contatoViewModel: ContatoViewModel // ViewModel como parâmetro
+    ) {
+    val contato = listaContatos[position]
+
+//    val nome = listaContatos[position].nome
+//    val sobrenome = listaContatos[position].sobrenome
+//    val idade = listaContatos[position].idade
+//    val celular = listaContatos[position].celular
+
+//    val contatoViewModel: ContatoViewModel = viewModel()
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp),
+            .padding(20.dp, 10.dp),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.elevatedCardColors(
             containerColor = WHITE,
@@ -45,7 +62,7 @@ fun ContatoItem(navController: NavController) {
         ) {
             val (txtNome, txtIdade, txtCelular, btAtualizar, btDeletar) = createRefs()
             Text(
-                text = "Contato: nome sobrenome",
+                text = "Contato: ${contato.nome} ${contato.sobrenome}",
                 fontSize = 18.sp,
                 modifier = Modifier.constrainAs(txtNome) {
                     top.linkTo(parent.top, margin = 10.dp)
@@ -53,7 +70,7 @@ fun ContatoItem(navController: NavController) {
                 }
             )
             Text(
-                text = "Idade: Idade",
+                text = "Idade: ${contato.idade}",
                 fontSize = 18.sp,
                 modifier = Modifier.constrainAs(txtIdade) {
                     top.linkTo(txtNome.bottom, margin = 5.dp)
@@ -61,7 +78,7 @@ fun ContatoItem(navController: NavController) {
                 }
             )
             Text(
-                text = "Numero: txtCelular",
+                text = "Numero: ${contato.celular}",
                 fontSize = 18.sp,
                 modifier = Modifier.constrainAs(txtCelular) {
                     top.linkTo(txtIdade.bottom, margin = 5.dp)
@@ -73,6 +90,7 @@ fun ContatoItem(navController: NavController) {
                 imageVector = Icons.Default.Edit, contentDescription = null,
                 modifier = Modifier
                     .clickable {
+                        navController.navigate("atualizarContato/${contato.uid}/${contato.nome}/${contato.sobrenome}/${contato.idade}/${contato.celular}")
                         navController.navigate("atualizarContato")
                     }
                     .constrainAs(btAtualizar) {
@@ -93,7 +111,6 @@ fun ContatoItem(navController: NavController) {
                     },
                 tint = RED
             )
-
         }
     }
 }

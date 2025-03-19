@@ -3,7 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    id("com.google.devtools.ksp")
+//    id("com.google.devtools.ksp")
+
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -69,11 +72,16 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+//    ksp("androidx.room:room-compiler:$room_version")
 
     //constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-beta01")
 
     implementation(platform("androidx.compose:compose-bom:2025.01.01"))
     implementation("androidx.compose.material3:material3")
+
+    //Hilt
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 }
