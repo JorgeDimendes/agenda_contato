@@ -20,7 +20,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        //enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark( Color.BLACK ))
         setContent {
 
             val navController = rememberNavController()
