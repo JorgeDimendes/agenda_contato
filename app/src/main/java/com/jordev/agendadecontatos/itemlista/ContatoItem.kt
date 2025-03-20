@@ -1,6 +1,8 @@
 package com.jordev.agendadecontatos.itemlista
 
+import android.app.AlertDialog
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,18 +15,23 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import com.jordev.agendadecontatos.AppDatabase
 import com.jordev.agendadecontatos.dao.ContatoDao
 import com.jordev.agendadecontatos.model.Contato
 import com.jordev.agendadecontatos.ui.theme.BLACK
 import com.jordev.agendadecontatos.ui.theme.RED
 import com.jordev.agendadecontatos.ui.theme.WHITE
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-//@Preview(showBackground = true)
+private lateinit var contatoDao: ContatoDao
+
 @Composable
 fun ContatoItem(
     navController: NavController,
@@ -32,12 +39,35 @@ fun ContatoItem(
     listaContatos: MutableList<Contato>,
     context: Context
 ){
-//    val contato: MutableList<ContatoDao> = mutableListOf()
+    val scope = rememberCoroutineScope()
     val nome = listaContatos[position].nome
     val sobrenome = listaContatos[position].sobrenome
     val idade = listaContatos[position].idade
     val celular = listaContatos[position].celular
     val uid = listaContatos[position].uid
+
+    val contato = listaContatos[position]
+
+    fun alertDialogDeletarContato(){
+        val alertDialog = AlertDialog.Builder(context)
+        alertDialog.setTitle("Deseja Excluir o Contato $nome $sobrenome?")
+            .setMessage("Tem certeza?")
+        alertDialog.setPositiveButton("Sim"){_,_ ->
+            scope.launch(Dispatchers.IO){
+                contatoDao = AppDatabase.getInstance(context).contatoDao()
+                contatoDao.deletar(uid)
+                listaContatos.remove(contato)
+            }
+            scope.launch(Dispatchers.Main) {
+                navController.navigate("listaContatos")
+                Toast.makeText(context, "Contato excluído com sucesso", Toast.LENGTH_SHORT).show()
+            }
+        }
+        alertDialog.setNegativeButton("Não") { _, _ ->
+
+        }
+        alertDialog.show()
+    }
 
     Card(
         modifier = Modifier
@@ -97,7 +127,7 @@ fun ContatoItem(
                 imageVector = Icons.Default.Delete, contentDescription = null,
                 modifier = Modifier
                     .clickable {
-
+                        alertDialogDeletarContato()
                     }
                     .constrainAs(btDeletar) {
                         bottom.linkTo(parent.bottom, margin = 5.dp)
