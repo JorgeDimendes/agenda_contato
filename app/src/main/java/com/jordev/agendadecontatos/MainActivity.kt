@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = "salvarContato"){
                     SalvarContato(navController)
                 }
+
                 composable(
                     route = "atualizarContato/{uid}",
                     arguments = listOf(navArgument("uid"){})
