@@ -1,6 +1,5 @@
 package com.jordev.agendadecontatos.views
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,29 +28,33 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.jordev.agendadecontatos.AppDatabase
 import com.jordev.agendadecontatos.ChangeStatusBarTextColor
 import com.jordev.agendadecontatos.componentes.CustomButton
 import com.jordev.agendadecontatos.componentes.CustomTextField
+import com.jordev.agendadecontatos.dao.ContatoDao
 import com.jordev.agendadecontatos.ui.theme.PURPLE500
 import com.jordev.agendadecontatos.ui.theme.WHITE
-import com.jordev.agendadecontatos.viewmodel.ContatoViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+private lateinit var contatoDao: ContatoDao
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AtualizarContato(navController: NavController) {
-    val contatoViewModel: ContatoViewModel = viewModel()
-    val contato = contatoViewModel.contatoSelecionado.value ?: return
+fun AtualizarContato(navController: NavController, uid: String) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
-    var nome by remember { mutableStateOf(contato.nome) }
-    var sobrenome by remember { mutableStateOf(contato.sobrenome) }
-    var idade by remember { mutableStateOf(contato.idade) }
-    var celular by remember { mutableStateOf(contato.celular) }
-    val context: Context = LocalContext.current
-
+    var nome by remember { mutableStateOf("") }
+    var sobrenome by remember { mutableStateOf("") }
+    var idade by remember { mutableStateOf("") }
+    var celular by remember { mutableStateOf("") }
 
 
+    //Configuração da cor do tema letra/icon
     ChangeStatusBarTextColor(false)
 
     Scaffold (
@@ -75,7 +79,7 @@ fun AtualizarContato(navController: NavController) {
                 .verticalScroll(rememberScrollState())
         ) {
             CustomTextField(
-                valueId = nome!!,
+                valueId = nome,
                 onValueChangeId = {
                     nome = it
                 },
@@ -86,7 +90,7 @@ fun AtualizarContato(navController: NavController) {
                 )
             )
             CustomTextField(
-                valueId = sobrenome!!,
+                valueId = sobrenome,
                 onValueChangeId = {
                     sobrenome = it
                 },
@@ -97,7 +101,7 @@ fun AtualizarContato(navController: NavController) {
                 )
             )
             CustomTextField(
-                valueId = idade!!,
+                valueId = idade,
                 onValueChangeId = {
                     idade = it
                 },
@@ -106,7 +110,7 @@ fun AtualizarContato(navController: NavController) {
                 keyboardOptionsId = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             CustomTextField(
-                valueId = celular!!,
+                valueId = celular,
                 onValueChangeId = {
                     celular = it
                 },
@@ -117,12 +121,25 @@ fun AtualizarContato(navController: NavController) {
             )
             CustomButton(
                 onClickId = {
-                    if (nome!!.isEmpty() || sobrenome!!.isEmpty() || idade!!.isEmpty() || celular!!.isEmpty()){
-                        Toast.makeText(context, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(context, "Contato Atualizado com sucesso", Toast.LENGTH_SHORT).show()
-                        navController.navigate("listaContatos")
+                    var mensagem = false
 
+                    scope.launch (Dispatchers.IO){
+
+                        if (nome.isEmpty() || sobrenome.isEmpty() || idade.isEmpty() || celular.isEmpty()){
+                            mensagem = false
+                        }else{
+                            mensagem = true
+                            contatoDao = AppDatabase.getInstance(context).contatoDao()
+                            contatoDao.atualizar(uid.toInt(), nome, sobrenome, idade, celular)
+                        }
+                    }
+                    scope.launch(Dispatchers.Main){
+                        if (mensagem){
+                            Toast.makeText(context, "Contato Atualizado com sucesso", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
+                        } else{
+                            Toast.makeText(context, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 },
                 modifierId = Modifier,
