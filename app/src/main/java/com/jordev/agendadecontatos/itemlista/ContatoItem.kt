@@ -31,7 +31,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private lateinit var contatoDao: ContatoDao
-//
 @Composable
 fun ContatoItem(
     navController: NavController,
