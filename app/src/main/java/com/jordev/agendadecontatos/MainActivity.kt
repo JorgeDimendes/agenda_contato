@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,7 +20,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        //enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark( Color.BLACK ))
         setContent {
 
             val navController = rememberNavController()
@@ -33,6 +31,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = "salvarContato"){
                     SalvarContato(navController)
                 }
+
                 composable(
                     route = "atualizarContato/{uid}",
                     arguments = listOf(navArgument("uid"){})
