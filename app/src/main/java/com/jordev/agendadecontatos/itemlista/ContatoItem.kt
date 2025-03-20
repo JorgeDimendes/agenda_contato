@@ -37,11 +37,12 @@ fun ContatoItem(
     val sobrenome = listaContatos[position].sobrenome
     val idade = listaContatos[position].idade
     val celular = listaContatos[position].celular
+    val uid = listaContatos[position].uid
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp),
+            .padding(20.dp, 8.dp),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.elevatedCardColors(
             containerColor = WHITE,
@@ -84,7 +85,7 @@ fun ContatoItem(
                 imageVector = Icons.Default.Edit, contentDescription = null,
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("atualizarContato")
+                        navController.navigate("atualizarContato/${uid}")
                     }
                     .constrainAs(btAtualizar) {
                         bottom.linkTo(parent.bottom, margin = 5.dp)

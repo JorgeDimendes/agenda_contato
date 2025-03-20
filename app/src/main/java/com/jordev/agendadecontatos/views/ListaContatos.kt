@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -50,6 +51,7 @@ fun ListaContatos(navController: NavController) {
 
     ChangeStatusBarTextColor(darkIcons = false) // Ícones e texto escuros
     Scaffold(
+        containerColor = WHITE,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -75,7 +77,7 @@ fun ListaContatos(navController: NavController) {
         }
 
     ) { paddingvalue ->
-        LazyColumn(modifier = Modifier.padding(paddingvalue).padding(bottom = 40.dp)){
+        LazyColumn(modifier = Modifier.padding(paddingvalue).padding(0.dp, 20.dp, 0.dp, 50.dp)){
             itemsIndexed(listaContatos){position, item ->
                 ContatoItem(
                     navController = navController,
